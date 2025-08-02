@@ -242,6 +242,9 @@ void Lexer::scanToken() {
             case '.':
                 addToken(TokenType::DOT);
                 break;
+            case '"':
+                string();
+                break;
             default:
                 // Skip unknown characters for now
                 break;
@@ -375,6 +378,36 @@ bool Lexer::isAlpha(char c) {
 
 bool Lexer::isAlphaNumeric(char c) {
     return isAlpha(c) || isDigit(c);
+}
+
+void Lexer::string() {
+    // Keep scanning until we find the closing quote
+    while (peek() != '"' && !isAtEnd()) {
+        if (peek() == '\n') {
+            line++;
+            column = 1;
+        }
+        
+        // Handle escape sequences
+        if (peek() == '\\') {
+            advance(); // consume the backslash
+            if (!isAtEnd()) {
+                advance(); // consume the escaped character
+            }
+        } else {
+            advance();
+        }
+    }
+    
+    if (isAtEnd()) {
+        // TODO: Error - Unterminated string
+        return;
+    }
+    
+    // Consume the closing "
+    advance();
+    
+    addToken(TokenType::STRING_LITERAL);
 }
 
 } // namespace msl_parser

@@ -7,6 +7,7 @@ const char* tokenTypeToString(TokenType type) {
         // Literals
         case TokenType::INTEGER_LITERAL: return "INTEGER_LITERAL";
         case TokenType::FLOAT_LITERAL: return "FLOAT_LITERAL";
+        case TokenType::STRING_LITERAL: return "STRING_LITERAL";
         
         // Identifier
         case TokenType::IDENTIFIER: return "IDENTIFIER";

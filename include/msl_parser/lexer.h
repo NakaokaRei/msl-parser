@@ -23,6 +23,7 @@ private:
     void scanToken();
     void number();
     void identifier();
+    void string();
     
     bool isDigit(char c);
     bool isHexDigit(char c);
