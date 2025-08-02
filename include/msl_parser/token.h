@@ -10,6 +10,7 @@ enum class TokenType {
     // Literals
     INTEGER_LITERAL,
     FLOAT_LITERAL,
+    STRING_LITERAL,
     
     // Identifier
     IDENTIFIER,
