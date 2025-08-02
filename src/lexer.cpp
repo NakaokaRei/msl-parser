@@ -122,6 +122,26 @@ void Lexer::scanToken() {
                 if (peek() == '=') {
                     advance();
                     addToken(TokenType::DIVIDE_ASSIGN);
+                } else if (peek() == '/') {
+                    // Single-line comment
+                    while (peek() != '\n' && !isAtEnd()) {
+                        advance();
+                    }
+                } else if (peek() == '*') {
+                    // Multi-line comment
+                    advance(); // consume *
+                    while (!isAtEnd()) {
+                        if (peek() == '*' && peekNext() == '/') {
+                            advance(); // consume *
+                            advance(); // consume /
+                            break;
+                        }
+                        if (peek() == '\n') {
+                            line++;
+                            column = 1;
+                        }
+                        advance();
+                    }
                 } else {
                     addToken(TokenType::DIVIDE);
                 }
