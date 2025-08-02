@@ -278,8 +278,8 @@ TEST(LexerTest, IdentifierKeywordEdgeCases) {
         Lexer lexer("float4 position = float4(1.0);");
         auto tokens = lexer.scanTokens();
         
-        // Now includes = operator
-        ASSERT_EQ(tokens.size(), 6);
+        // Now includes = operator, parentheses, dot, and semicolon
+        ASSERT_EQ(tokens.size(), 9);
         EXPECT_EQ(tokens[0].type, TokenType::FLOAT4);  // float4 is now a keyword
         EXPECT_EQ(tokens[0].lexeme, "float4");
         EXPECT_EQ(tokens[1].type, TokenType::IDENTIFIER);
@@ -288,8 +288,15 @@ TEST(LexerTest, IdentifierKeywordEdgeCases) {
         EXPECT_EQ(tokens[2].lexeme, "=");
         EXPECT_EQ(tokens[3].type, TokenType::FLOAT4);
         EXPECT_EQ(tokens[3].lexeme, "float4");
-        EXPECT_EQ(tokens[4].type, TokenType::FLOAT_LITERAL);
-        EXPECT_EQ(tokens[4].lexeme, "1.0");
+        EXPECT_EQ(tokens[4].type, TokenType::LEFT_PAREN);
+        EXPECT_EQ(tokens[4].lexeme, "(");
+        EXPECT_EQ(tokens[5].type, TokenType::FLOAT_LITERAL);
+        EXPECT_EQ(tokens[5].lexeme, "1.0");
+        EXPECT_EQ(tokens[6].type, TokenType::RIGHT_PAREN);
+        EXPECT_EQ(tokens[6].lexeme, ")");
+        EXPECT_EQ(tokens[7].type, TokenType::SEMICOLON);
+        EXPECT_EQ(tokens[7].lexeme, ";");
+        EXPECT_EQ(tokens[8].type, TokenType::END_OF_FILE);
     }
     
     // Underscore variations
@@ -593,5 +600,177 @@ TEST(LexerTest, OperatorEdgeCases) {
         EXPECT_EQ(tokens[3].type, TokenType::IDENTIFIER);
         EXPECT_EQ(tokens[4].type, TokenType::MINUS_MINUS);
         EXPECT_EQ(tokens[5].type, TokenType::END_OF_FILE);
+    }
+}
+
+TEST(LexerTest, ParenthesesBracesBrackets) {
+    // Parentheses
+    {
+        Lexer lexer("()");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 3);
+        EXPECT_EQ(tokens[0].type, TokenType::LEFT_PAREN);
+        EXPECT_EQ(tokens[0].lexeme, "(");
+        EXPECT_EQ(tokens[1].type, TokenType::RIGHT_PAREN);
+        EXPECT_EQ(tokens[1].lexeme, ")");
+        EXPECT_EQ(tokens[2].type, TokenType::END_OF_FILE);
+    }
+    
+    // Braces
+    {
+        Lexer lexer("{}");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 3);
+        EXPECT_EQ(tokens[0].type, TokenType::LEFT_BRACE);
+        EXPECT_EQ(tokens[0].lexeme, "{");
+        EXPECT_EQ(tokens[1].type, TokenType::RIGHT_BRACE);
+        EXPECT_EQ(tokens[1].lexeme, "}");
+        EXPECT_EQ(tokens[2].type, TokenType::END_OF_FILE);
+    }
+    
+    // Brackets
+    {
+        Lexer lexer("[]");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 3);
+        EXPECT_EQ(tokens[0].type, TokenType::LEFT_BRACKET);
+        EXPECT_EQ(tokens[0].lexeme, "[");
+        EXPECT_EQ(tokens[1].type, TokenType::RIGHT_BRACKET);
+        EXPECT_EQ(tokens[1].lexeme, "]");
+        EXPECT_EQ(tokens[2].type, TokenType::END_OF_FILE);
+    }
+    
+    // Mixed delimiters
+    {
+        Lexer lexer("(){}[]");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 7);
+        EXPECT_EQ(tokens[0].type, TokenType::LEFT_PAREN);
+        EXPECT_EQ(tokens[1].type, TokenType::RIGHT_PAREN);
+        EXPECT_EQ(tokens[2].type, TokenType::LEFT_BRACE);
+        EXPECT_EQ(tokens[3].type, TokenType::RIGHT_BRACE);
+        EXPECT_EQ(tokens[4].type, TokenType::LEFT_BRACKET);
+        EXPECT_EQ(tokens[5].type, TokenType::RIGHT_BRACKET);
+        EXPECT_EQ(tokens[6].type, TokenType::END_OF_FILE);
+    }
+}
+
+TEST(LexerTest, Punctuation) {
+    // Basic punctuation
+    {
+        Lexer lexer("; , .");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 4);
+        EXPECT_EQ(tokens[0].type, TokenType::SEMICOLON);
+        EXPECT_EQ(tokens[0].lexeme, ";");
+        EXPECT_EQ(tokens[1].type, TokenType::COMMA);
+        EXPECT_EQ(tokens[1].lexeme, ",");
+        EXPECT_EQ(tokens[2].type, TokenType::DOT);
+        EXPECT_EQ(tokens[2].lexeme, ".");
+        EXPECT_EQ(tokens[3].type, TokenType::END_OF_FILE);
+    }
+    
+    // In context
+    {
+        Lexer lexer("foo.bar;");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 5);
+        EXPECT_EQ(tokens[0].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[1].type, TokenType::DOT);
+        EXPECT_EQ(tokens[2].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[3].type, TokenType::SEMICOLON);
+        EXPECT_EQ(tokens[4].type, TokenType::END_OF_FILE);
+    }
+    
+    // Function call with arguments
+    {
+        Lexer lexer("func(a, b, c);");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 10);
+        EXPECT_EQ(tokens[0].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[1].type, TokenType::LEFT_PAREN);
+        EXPECT_EQ(tokens[2].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[3].type, TokenType::COMMA);
+        EXPECT_EQ(tokens[4].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[5].type, TokenType::COMMA);
+        EXPECT_EQ(tokens[6].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[7].type, TokenType::RIGHT_PAREN);
+        EXPECT_EQ(tokens[8].type, TokenType::SEMICOLON);
+        EXPECT_EQ(tokens[9].type, TokenType::END_OF_FILE);
+    }
+}
+
+TEST(LexerTest, MultiCharacterDelimiters) {
+    // Arrow operator
+    {
+        Lexer lexer("->");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 2);
+        EXPECT_EQ(tokens[0].type, TokenType::ARROW);
+        EXPECT_EQ(tokens[0].lexeme, "->");
+        EXPECT_EQ(tokens[1].type, TokenType::END_OF_FILE);
+    }
+    
+    // Scope resolution
+    {
+        Lexer lexer("::");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 2);
+        EXPECT_EQ(tokens[0].type, TokenType::SCOPE_RESOLUTION);
+        EXPECT_EQ(tokens[0].lexeme, "::");
+        EXPECT_EQ(tokens[1].type, TokenType::END_OF_FILE);
+    }
+    
+    // Attribute brackets
+    {
+        Lexer lexer("[[ ]]");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 3);
+        EXPECT_EQ(tokens[0].type, TokenType::ATTRIBUTE_LEFT);
+        EXPECT_EQ(tokens[0].lexeme, "[[");
+        EXPECT_EQ(tokens[1].type, TokenType::ATTRIBUTE_RIGHT);
+        EXPECT_EQ(tokens[1].lexeme, "]]");
+        EXPECT_EQ(tokens[2].type, TokenType::END_OF_FILE);
+    }
+    
+    // In context
+    {
+        Lexer lexer("foo::bar->baz");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 6);
+        EXPECT_EQ(tokens[0].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[1].type, TokenType::SCOPE_RESOLUTION);
+        EXPECT_EQ(tokens[2].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[3].type, TokenType::ARROW);
+        EXPECT_EQ(tokens[4].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[5].type, TokenType::END_OF_FILE);
+    }
+    
+    // Attributes with content
+    {
+        Lexer lexer("[[nodiscard]] int func();");
+        auto tokens = lexer.scanTokens();
+        
+        ASSERT_EQ(tokens.size(), 9);
+        EXPECT_EQ(tokens[0].type, TokenType::ATTRIBUTE_LEFT);
+        EXPECT_EQ(tokens[1].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[2].type, TokenType::ATTRIBUTE_RIGHT);
+        EXPECT_EQ(tokens[3].type, TokenType::INT);
+        EXPECT_EQ(tokens[4].type, TokenType::IDENTIFIER);
+        EXPECT_EQ(tokens[5].type, TokenType::LEFT_PAREN);
+        EXPECT_EQ(tokens[6].type, TokenType::RIGHT_PAREN);
+        EXPECT_EQ(tokens[7].type, TokenType::SEMICOLON);
+        EXPECT_EQ(tokens[8].type, TokenType::END_OF_FILE);
     }
 }
