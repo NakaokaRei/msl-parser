@@ -82,7 +82,125 @@ void Lexer::scanToken() {
         line++;
         column = 1;
     } else {
-        // Skip unknown characters for now
+        // Handle operators
+        switch (c) {
+            // Single-character operators
+            case '+':
+                if (peek() == '+') {
+                    advance();
+                    addToken(TokenType::PLUS_PLUS);
+                } else if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::PLUS_ASSIGN);
+                } else {
+                    addToken(TokenType::PLUS);
+                }
+                break;
+            case '-':
+                if (peek() == '-') {
+                    advance();
+                    addToken(TokenType::MINUS_MINUS);
+                } else if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::MINUS_ASSIGN);
+                } else {
+                    addToken(TokenType::MINUS);
+                }
+                break;
+            case '*':
+                if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::MULTIPLY_ASSIGN);
+                } else {
+                    addToken(TokenType::MULTIPLY);
+                }
+                break;
+            case '/':
+                if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::DIVIDE_ASSIGN);
+                } else {
+                    addToken(TokenType::DIVIDE);
+                }
+                break;
+            case '%':
+                if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::MODULO_ASSIGN);
+                } else {
+                    addToken(TokenType::MODULO);
+                }
+                break;
+            case '=':
+                if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::EQUAL);
+                } else {
+                    addToken(TokenType::ASSIGN);
+                }
+                break;
+            case '!':
+                if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::NOT_EQUAL);
+                } else {
+                    addToken(TokenType::NOT);
+                }
+                break;
+            case '<':
+                if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::LESS_EQUAL);
+                } else if (peek() == '<') {
+                    advance();
+                    addToken(TokenType::LEFT_SHIFT);
+                } else {
+                    addToken(TokenType::LESS_THAN);
+                }
+                break;
+            case '>':
+                if (peek() == '=') {
+                    advance();
+                    addToken(TokenType::GREATER_EQUAL);
+                } else if (peek() == '>') {
+                    advance();
+                    addToken(TokenType::RIGHT_SHIFT);
+                } else {
+                    addToken(TokenType::GREATER_THAN);
+                }
+                break;
+            case '&':
+                if (peek() == '&') {
+                    advance();
+                    addToken(TokenType::AND);
+                } else {
+                    addToken(TokenType::BITWISE_AND);
+                }
+                break;
+            case '|':
+                if (peek() == '|') {
+                    advance();
+                    addToken(TokenType::OR);
+                } else {
+                    addToken(TokenType::BITWISE_OR);
+                }
+                break;
+            case '^':
+                addToken(TokenType::BITWISE_XOR);
+                break;
+            case '~':
+                addToken(TokenType::BITWISE_NOT);
+                break;
+            case '?':
+                addToken(TokenType::QUESTION);
+                break;
+            case ':':
+                addToken(TokenType::COLON);
+                break;
+            default:
+                // Skip unknown characters for now
+                break;
+        }
     }
 }
 

@@ -62,8 +62,47 @@ const char* tokenTypeToString(TokenType type) {
         case TokenType::THREAD: return "THREAD";
         case TokenType::THREADGROUP: return "THREADGROUP";
         
-        // Operators
+        // Operators - Arithmetic
         case TokenType::PLUS: return "PLUS";
+        case TokenType::MINUS: return "MINUS";
+        case TokenType::MULTIPLY: return "MULTIPLY";
+        case TokenType::DIVIDE: return "DIVIDE";
+        case TokenType::MODULO: return "MODULO";
+        
+        // Operators - Assignment
+        case TokenType::ASSIGN: return "ASSIGN";
+        case TokenType::PLUS_ASSIGN: return "PLUS_ASSIGN";
+        case TokenType::MINUS_ASSIGN: return "MINUS_ASSIGN";
+        case TokenType::MULTIPLY_ASSIGN: return "MULTIPLY_ASSIGN";
+        case TokenType::DIVIDE_ASSIGN: return "DIVIDE_ASSIGN";
+        case TokenType::MODULO_ASSIGN: return "MODULO_ASSIGN";
+        
+        // Operators - Comparison
+        case TokenType::EQUAL: return "EQUAL";
+        case TokenType::NOT_EQUAL: return "NOT_EQUAL";
+        case TokenType::LESS_THAN: return "LESS_THAN";
+        case TokenType::GREATER_THAN: return "GREATER_THAN";
+        case TokenType::LESS_EQUAL: return "LESS_EQUAL";
+        case TokenType::GREATER_EQUAL: return "GREATER_EQUAL";
+        
+        // Operators - Logical
+        case TokenType::AND: return "AND";
+        case TokenType::OR: return "OR";
+        case TokenType::NOT: return "NOT";
+        
+        // Operators - Bitwise
+        case TokenType::BITWISE_AND: return "BITWISE_AND";
+        case TokenType::BITWISE_OR: return "BITWISE_OR";
+        case TokenType::BITWISE_XOR: return "BITWISE_XOR";
+        case TokenType::BITWISE_NOT: return "BITWISE_NOT";
+        case TokenType::LEFT_SHIFT: return "LEFT_SHIFT";
+        case TokenType::RIGHT_SHIFT: return "RIGHT_SHIFT";
+        
+        // Operators - Other
+        case TokenType::PLUS_PLUS: return "PLUS_PLUS";
+        case TokenType::MINUS_MINUS: return "MINUS_MINUS";
+        case TokenType::QUESTION: return "QUESTION";
+        case TokenType::COLON: return "COLON";
         
         // Special
         case TokenType::END_OF_FILE: return "END_OF_FILE";

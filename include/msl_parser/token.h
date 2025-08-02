@@ -65,8 +65,47 @@ enum class TokenType {
     THREAD,
     THREADGROUP,
     
-    // Operators (placeholder for now)
+    // Operators - Arithmetic
     PLUS,
+    MINUS,
+    MULTIPLY,
+    DIVIDE,
+    MODULO,
+    
+    // Operators - Assignment
+    ASSIGN,
+    PLUS_ASSIGN,
+    MINUS_ASSIGN,
+    MULTIPLY_ASSIGN,
+    DIVIDE_ASSIGN,
+    MODULO_ASSIGN,
+    
+    // Operators - Comparison
+    EQUAL,
+    NOT_EQUAL,
+    LESS_THAN,
+    GREATER_THAN,
+    LESS_EQUAL,
+    GREATER_EQUAL,
+    
+    // Operators - Logical
+    AND,
+    OR,
+    NOT,
+    
+    // Operators - Bitwise
+    BITWISE_AND,
+    BITWISE_OR,
+    BITWISE_XOR,
+    BITWISE_NOT,
+    LEFT_SHIFT,
+    RIGHT_SHIFT,
+    
+    // Operators - Other
+    PLUS_PLUS,
+    MINUS_MINUS,
+    QUESTION,
+    COLON,
     
     // Special
     END_OF_FILE

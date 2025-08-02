@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git pull:*)",
+      "Bash(git checkout:*)",
+      "Bash(cmake:*)",
+      "Bash(ctest:*)"
+    ],
+    "deny": []
+  }
+}
