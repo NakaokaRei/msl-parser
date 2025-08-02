@@ -19,6 +19,17 @@ private:
     size_t current = 0;
     uint32_t line = 1;
     uint32_t column = 1;
+    
+    void scanToken();
+    void number();
+    
+    bool isDigit(char c);
+    bool isHexDigit(char c);
+    bool isAtEnd();
+    char advance();
+    char peek();
+    char peekNext();
+    void addToken(TokenType type);
 };
 
 } // namespace msl_parser
