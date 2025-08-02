@@ -107,6 +107,25 @@ enum class TokenType {
     QUESTION,
     COLON,
     
+    // Delimiters
+    LEFT_PAREN,
+    RIGHT_PAREN,
+    LEFT_BRACE,
+    RIGHT_BRACE,
+    LEFT_BRACKET,
+    RIGHT_BRACKET,
+    
+    // Punctuation
+    SEMICOLON,
+    COMMA,
+    DOT,
+    ARROW,
+    SCOPE_RESOLUTION,
+    
+    // Attributes
+    ATTRIBUTE_LEFT,
+    ATTRIBUTE_RIGHT,
+    
     // Special
     END_OF_FILE
 };

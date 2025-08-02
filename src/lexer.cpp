@@ -103,6 +103,9 @@ void Lexer::scanToken() {
                 } else if (peek() == '=') {
                     advance();
                     addToken(TokenType::MINUS_ASSIGN);
+                } else if (peek() == '>') {
+                    advance();
+                    addToken(TokenType::ARROW);
                 } else {
                     addToken(TokenType::MINUS);
                 }
@@ -195,7 +198,49 @@ void Lexer::scanToken() {
                 addToken(TokenType::QUESTION);
                 break;
             case ':':
-                addToken(TokenType::COLON);
+                if (peek() == ':') {
+                    advance();
+                    addToken(TokenType::SCOPE_RESOLUTION);
+                } else {
+                    addToken(TokenType::COLON);
+                }
+                break;
+            case '(':
+                addToken(TokenType::LEFT_PAREN);
+                break;
+            case ')':
+                addToken(TokenType::RIGHT_PAREN);
+                break;
+            case '{':
+                addToken(TokenType::LEFT_BRACE);
+                break;
+            case '}':
+                addToken(TokenType::RIGHT_BRACE);
+                break;
+            case '[':
+                if (peek() == '[') {
+                    advance();
+                    addToken(TokenType::ATTRIBUTE_LEFT);
+                } else {
+                    addToken(TokenType::LEFT_BRACKET);
+                }
+                break;
+            case ']':
+                if (peek() == ']') {
+                    advance();
+                    addToken(TokenType::ATTRIBUTE_RIGHT);
+                } else {
+                    addToken(TokenType::RIGHT_BRACKET);
+                }
+                break;
+            case ';':
+                addToken(TokenType::SEMICOLON);
+                break;
+            case ',':
+                addToken(TokenType::COMMA);
+                break;
+            case '.':
+                addToken(TokenType::DOT);
                 break;
             default:
                 // Skip unknown characters for now

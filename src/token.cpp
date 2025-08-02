@@ -104,6 +104,25 @@ const char* tokenTypeToString(TokenType type) {
         case TokenType::QUESTION: return "QUESTION";
         case TokenType::COLON: return "COLON";
         
+        // Delimiters
+        case TokenType::LEFT_PAREN: return "LEFT_PAREN";
+        case TokenType::RIGHT_PAREN: return "RIGHT_PAREN";
+        case TokenType::LEFT_BRACE: return "LEFT_BRACE";
+        case TokenType::RIGHT_BRACE: return "RIGHT_BRACE";
+        case TokenType::LEFT_BRACKET: return "LEFT_BRACKET";
+        case TokenType::RIGHT_BRACKET: return "RIGHT_BRACKET";
+        
+        // Punctuation
+        case TokenType::SEMICOLON: return "SEMICOLON";
+        case TokenType::COMMA: return "COMMA";
+        case TokenType::DOT: return "DOT";
+        case TokenType::ARROW: return "ARROW";
+        case TokenType::SCOPE_RESOLUTION: return "SCOPE_RESOLUTION";
+        
+        // Attributes
+        case TokenType::ATTRIBUTE_LEFT: return "ATTRIBUTE_LEFT";
+        case TokenType::ATTRIBUTE_RIGHT: return "ATTRIBUTE_RIGHT";
+        
         // Special
         case TokenType::END_OF_FILE: return "END_OF_FILE";
         
