@@ -22,9 +22,12 @@ private:
     
     void scanToken();
     void number();
+    void identifier();
     
     bool isDigit(char c);
     bool isHexDigit(char c);
+    bool isAlpha(char c);
+    bool isAlphaNumeric(char c);
     bool isAtEnd();
     char advance();
     char peek();

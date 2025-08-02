@@ -1,7 +1,61 @@
 #include "msl_parser/lexer.h"
 #include <cctype>
+#include <unordered_map>
 
 namespace msl_parser {
+
+static const std::unordered_map<std::string, TokenType> keywords = {
+    // Types
+    {"void", TokenType::VOID},
+    {"bool", TokenType::BOOL},
+    {"int", TokenType::INT},
+    {"uint", TokenType::UINT},
+    {"short", TokenType::SHORT},
+    {"ushort", TokenType::USHORT},
+    {"char", TokenType::CHAR},
+    {"uchar", TokenType::UCHAR},
+    {"float", TokenType::FLOAT},
+    {"half", TokenType::HALF},
+    {"double", TokenType::DOUBLE},
+    
+    // Vector Types
+    {"float2", TokenType::FLOAT2},
+    {"float3", TokenType::FLOAT3},
+    {"float4", TokenType::FLOAT4},
+    {"int2", TokenType::INT2},
+    {"int3", TokenType::INT3},
+    {"int4", TokenType::INT4},
+    {"uint2", TokenType::UINT2},
+    {"uint3", TokenType::UINT3},
+    {"uint4", TokenType::UINT4},
+    
+    // Matrix Types
+    {"float2x2", TokenType::FLOAT2X2},
+    {"float3x3", TokenType::FLOAT3X3},
+    {"float4x4", TokenType::FLOAT4X4},
+    
+    // Control Flow
+    {"if", TokenType::IF},
+    {"else", TokenType::ELSE},
+    {"for", TokenType::FOR},
+    {"while", TokenType::WHILE},
+    {"do", TokenType::DO},
+    {"switch", TokenType::SWITCH},
+    {"case", TokenType::CASE},
+    {"default", TokenType::DEFAULT},
+    {"break", TokenType::BREAK},
+    {"continue", TokenType::CONTINUE},
+    {"return", TokenType::RETURN},
+    
+    // Metal-specific
+    {"kernel", TokenType::KERNEL},
+    {"vertex", TokenType::VERTEX},
+    {"fragment", TokenType::FRAGMENT},
+    {"device", TokenType::DEVICE},
+    {"constant", TokenType::CONSTANT},
+    {"thread", TokenType::THREAD},
+    {"threadgroup", TokenType::THREADGROUP},
+};
 
 Lexer::Lexer(const std::string& source) : source(source) {}
 
@@ -20,6 +74,8 @@ void Lexer::scanToken() {
     
     if (isDigit(c)) {
         number();
+    } else if (isAlpha(c)) {
+        identifier();
     } else if (c == ' ' || c == '\r' || c == '\t') {
         // Ignore whitespace
     } else if (c == '\n') {
@@ -132,6 +188,30 @@ char Lexer::peekNext() {
 void Lexer::addToken(TokenType type) {
     std::string text = source.substr(start, current - start);
     tokens.push_back(Token(type, text, line, column - text.length()));
+}
+
+void Lexer::identifier() {
+    while (isAlphaNumeric(peek())) {
+        advance();
+    }
+    
+    std::string text = source.substr(start, current - start);
+    
+    // Check if it's a keyword
+    auto it = keywords.find(text);
+    TokenType type = (it != keywords.end()) ? it->second : TokenType::IDENTIFIER;
+    
+    addToken(type);
+}
+
+bool Lexer::isAlpha(char c) {
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+           c == '_';
+}
+
+bool Lexer::isAlphaNumeric(char c) {
+    return isAlpha(c) || isDigit(c);
 }
 
 } // namespace msl_parser
