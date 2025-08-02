@@ -11,6 +11,12 @@ FetchContent_MakeAvailable(googletest)
 set(TEST_SOURCES
     test_token.cpp
     test_lexer.cpp
+    test_lexer_numeric.cpp
+    test_lexer_identifier.cpp
+    test_lexer_operator.cpp
+    test_lexer_delimiter.cpp
+    test_lexer_string.cpp
+    test_lexer_comment.cpp
 )
 
 # Create test executable
