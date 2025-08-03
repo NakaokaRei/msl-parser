@@ -17,6 +17,7 @@ set(TEST_SOURCES
     test_lexer_delimiter.cpp
     test_lexer_string.cpp
     test_lexer_comment.cpp
+    test_ast_node.cpp
 )
 
 # Create test executable
